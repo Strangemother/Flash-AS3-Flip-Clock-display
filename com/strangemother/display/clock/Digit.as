@@ -21,22 +21,12 @@
 		
 		public function Digit()
 		{
-			/*
-			perform replications and masking for the top and bottom.
-			*/
-			
-			//replicate digit.
-			
-			//character.mask = replicateTopPaddle();
-			
-		}
 		
+		}
 		
 		private function topAnimation():void
 		{
-			
-			
-				topPaddleB.character.digit.text = _value;
+			topPaddleB.character.digit.text = _value;
 			
 			TweenMax.to(topPaddle, animationSpeedStart, {scaleY: 0,ease:Expo.easeIn, onComplete: function(){
 				topPaddle.character.digit.text = _value;
@@ -123,7 +113,7 @@
 			animationSpeedStart = (delay * .45) * .001;  
 			animationSpeedEnd = (delay * .35) * .001;
 			
-			trace(animationSpeedStart + " " + animationSpeedEnd);
+			//trace(animationSpeedStart + " " + animationSpeedEnd);
 		}
 		
 		public function kill():void

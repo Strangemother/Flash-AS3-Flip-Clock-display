@@ -26,7 +26,7 @@ package com.strangemother.projects
 			clock.addDigit(d3);
 			clock.addDigit(d4);
 			
-			timer = new Timer(200);
+			timer = new Timer(1000);
 			timer.addEventListener(TimerEvent.TIMER, timerTimerEventHandler);
 			timer.start();
 			clock.delay = timer.delay;
