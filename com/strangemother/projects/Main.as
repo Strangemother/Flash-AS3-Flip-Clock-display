@@ -4,10 +4,13 @@ package com.strangemother.projects
 	
 	import flash.display.MovieClip;
 	import flash.events.Event;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
 	
 	public class Main extends MovieClip
 	{
 		public var clock:Clock;
+		public var timer:Timer;
 		
 		public function Main()
 		{
@@ -22,7 +25,18 @@ package com.strangemother.projects
 			clock.addDigit(d2);
 			clock.addDigit(d3);
 			clock.addDigit(d4);
-			clock.addDigit(d5);
+			
+			timer = new Timer(200);
+			timer.addEventListener(TimerEvent.TIMER, timerTimerEventHandler);
+			timer.start();
+			clock.delay = timer.delay;
 		}
+		
+		private function timerTimerEventHandler(ev:TimerEvent):void
+		{
+			clock.value = timer.currentCount.toString();
+			
+		}
+												
 	}
 }

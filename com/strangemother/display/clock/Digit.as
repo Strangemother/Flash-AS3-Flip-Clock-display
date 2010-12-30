@@ -1,12 +1,77 @@
-package com.strangemother.display.clock
+﻿package com.strangemother.display.clock
 {
+	import com.greensock.TweenMax;
+	import com.greensock.easing.*;
+	
 	import flash.display.MovieClip;
+	import flash.utils.describeType;
 	
 	public class Digit extends MovieClip
 	{
+		private var replicatedTopPaddle:MovieClip;
+		private var replicatedBottomPaddle:MovieClip;
+		private var replicatedCharacter:Character;
+		private var backPaddleTop:Paddle;
+		private var backPaddleBottom:Paddle;
+		
+		private var animationSpeedStart:Number = .45;
+		private var animationSpeedEnd:Number = .3;
+		
+		private var _value:String = '';
+		
 		public function Digit()
 		{
+			/*
+			perform replications and masking for the top and bottom.
+			*/
 			
+			//replicate digit.
+			
+			//character.mask = replicateTopPaddle();
+			
+		}
+		
+		
+		private function topAnimation():void
+		{
+			
+			
+				topPaddleB.character.digit.text = _value;
+			
+			TweenMax.to(topPaddle, animationSpeedStart, {scaleY: 0,ease:Expo.easeIn, onComplete: function(){
+				topPaddle.character.digit.text = _value;
+				topPaddle.scaleY = 1;
+				nextAnimationStage()
+			}});
+		}
+		
+		private function nextAnimationStage():void
+		{
+			bottomPaddle.scaleY = 0;
+			bottomPaddle.character.digit.text = _value;
+			TweenMax.to(bottomPaddle, animationSpeedEnd, {scaleY: 1, ease:Expo.easeOut, onComplete: function(){
+				bottomPaddleB.character.digit.text = _value;
+			}});
+		}
+		
+		private function replicate(sourceMovieClip:MovieClip, movieClip:MovieClip):MovieClip
+		{
+			var def:XML = describeType(sourceMovieClip);
+			var properties:XMLList = def..variable.@name + def..accessor.@name;
+			
+			for each(var property:String in properties ) 
+			{
+				try
+				{
+					movieClip[property] = sourceMovieClip[property];
+				}
+				catch(e:Error)
+				{}
+			}
+			
+			def = null;
+			
+			return movieClip;
 		}
 		
 		override public function get height():Number
@@ -33,9 +98,15 @@ package com.strangemother.display.clock
 			return this.paddleBottom.width;
 		}
 		
+		
+		
 		public function set value(val:String):void
-		{
-			this.character.digit.text = val;
+		{			
+			var oldValue:String = _value
+			_value = val;
+			
+			if(_value != oldValue)
+				topAnimation();
 		}
 		
 		/**
@@ -44,7 +115,15 @@ package com.strangemother.display.clock
 		 * */
 		public function get value():String
 		{
-			return this.character.digit.text;
+			return _value;
+		}
+		
+		public function calculateClickSpeed(delay:Number = 1000)
+		{
+			animationSpeedStart = (delay * .45) * .001;  
+			animationSpeedEnd = (delay * .35) * .001;
+			
+			trace(animationSpeedStart + " " + animationSpeedEnd);
 		}
 		
 		public function kill():void
