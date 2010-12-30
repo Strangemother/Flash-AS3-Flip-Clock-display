@@ -1,0 +1,16 @@
+So I need to write some documentation - but for now to get this working:
+
+Create an instance of your digit on stage. The reason its done this way rather than built entirely via code - so its easier to maniplate the visuals.
+
+if your instances of the flip digit are called 'd1', d2', etc... you may pass then into  your clock via the construct.
+
+	import com.strangemother.display.clock.Clock
+
+	var clock:Clock = new Clock(d1, d2, d3, d4);
+	clock.start();
+
+The clock has an internal timer - but you may use your own Timer instance.
+
+Look through the class of Clock for more methods.
+
+Enjoy.
