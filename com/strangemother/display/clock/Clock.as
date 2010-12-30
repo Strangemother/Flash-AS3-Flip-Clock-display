@@ -1,9 +1,12 @@
 ﻿package com.strangemother.display.clock
 {
 	import com.gskinner.utils.StringUtils;
+	import com.strangemother.event.ClockEvent;
 	
 	import flash.display.MovieClip;
 	import flash.errors.MemoryError;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
 	
 	import flashx.textLayout.elements.InlineGraphicElement;
 	
@@ -13,9 +16,33 @@
 		private var _value:String = '';
 		private var _delay:Number = 1000;
 		
-		public function Clock()
+		private var internalTimer:Timer;
+		
+		public static const NUMERIC_SWITCH:String = 'numericSwitch';
+		public static const NUMERIC_RANGE:String = 'numericRange';
+		
+		public function Clock(...digits)
 		{
-			super();
+			if(digits.length > 0)
+			{
+				this.addDigits(digits);
+			}
+			
+			internalTimer = new Timer(this.delay);
+			internalTimer.addEventListener(TimerEvent.TIMER, interTimerTimerEventHandler)
+		}
+		
+		public function addDigits(...digits):void
+		{
+			if(digits is Array)
+			{
+				digits = digits[0];
+			}
+			
+			for each(var digit:* in digits)
+			{
+				this.addDigit(digit as MovieClip);
+			}
 		}
 		
 		/**
@@ -26,8 +53,12 @@
 		 * */
 		public function addDigit(digit:MovieClip, position:int = int.MAX_VALUE):uint
 		{
-			digit.value = '0';
-			return this.digits.push(digit)
+			if(digit)
+			{
+				digit.value = '0';
+				return this.digits.push(digit)
+			}
+			return 0;
 		}
 		
 		/**
@@ -65,6 +96,42 @@
 			item.value = stringArray[index].toString();
 		}
 		
+		private function interTimerTimerEventHandler(ev:TimerEvent):void
+		{
+			this.dispatchEvent(ev);
+			this.dispatchClockEvent(ClockEvent.TICK);
+			this.value = String(internalTimer.currentCount);
+		}
+			
+		private function dispatchClockEvent(type):void
+		{
+			var event:ClockEvent = new ClockEvent(type);
+			this.dispatchEvent(event);
+		}
+		
+		/**
+		 * start the internal timer.
+		 * */
+		public function start():void
+		{
+			internalTimer.start();
+			
+		}
+		
+		/**
+		 *  stop the internal timer.
+		 * */
+		override public function stop():void
+		{
+			internalTimer.stop();
+		}
+		
+		public function get currentCount():int
+		{
+			return internalTimer.currentCount;
+		}
+		
+		
 		public function get value():String
 		{
 			return _value;
@@ -72,6 +139,7 @@
 		
 		public function set delay(value:Number):void
 		{
+			internalTimer.delay = value;
 			_delay = value;
 		}
 		
@@ -89,5 +157,7 @@
 		{
 			return _digits;
 		}
+		
+		
 	}
 }

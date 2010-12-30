@@ -1,6 +1,7 @@
 package com.strangemother.projects
 {
 	import com.strangemother.display.clock.Clock;
+	import com.strangemother.event.ClockEvent;
 	
 	import flash.display.MovieClip;
 	import flash.events.Event;
@@ -20,23 +21,10 @@ package com.strangemother.projects
 		private function addedToStageEventHandler(ev:Event):void
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStageEventHandler);
-			clock = new Clock();
-			clock.addDigit(d1);
-			clock.addDigit(d2);
-			clock.addDigit(d3);
-			clock.addDigit(d4);
 			
-			timer = new Timer(1000);
-			timer.addEventListener(TimerEvent.TIMER, timerTimerEventHandler);
-			timer.start();
-			clock.delay = timer.delay;
+			clock = new Clock(d1, d2, d3, d4);
+			clock.start();
 		}
 		
-		private function timerTimerEventHandler(ev:TimerEvent):void
-		{
-			clock.value = timer.currentCount.toString();
-			
-		}
-												
 	}
 }

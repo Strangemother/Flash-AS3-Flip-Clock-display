@@ -40,7 +40,7 @@
     <UsingOwnAlternateFile>0</UsingOwnAlternateFile>
     <OwnAlternateFilename></OwnAlternateFilename>
     <Width>550</Width>
-    <Height>400</Height>
+    <Height>230</Height>
     <Align>0</Align>
     <Units>0</Units>
     <Loop>1</Loop>
@@ -124,7 +124,7 @@
   </PublishFlashProperties>
   <PublishJpegProperties enabled="true">
     <Width>550</Width>
-    <Height>400</Height>
+    <Height>230</Height>
     <Progressive>0</Progressive>
     <DPI>4718592</DPI>
     <Size>0</Size>
@@ -150,7 +150,7 @@
   </PublishRNWKProperties>
   <PublishGifProperties enabled="true">
     <Width>550</Width>
-    <Height>400</Height>
+    <Height>230</Height>
     <Animated>0</Animated>
     <MatchMovieDim>1</MatchMovieDim>
     <Loop>1</Loop>
@@ -169,7 +169,7 @@
   </PublishGifProperties>
   <PublishPNGProperties enabled="true">
     <Width>550</Width>
-    <Height>400</Height>
+    <Height>230</Height>
     <OptimizeColors>1</OptimizeColors>
     <Interlace>0</Interlace>
     <Transparent>0</Transparent>
@@ -186,7 +186,7 @@
   </PublishPNGProperties>
   <PublishQTProperties enabled="true">
     <Width>550</Width>
-    <Height>400</Height>
+    <Height>230</Height>
     <MatchMovieDim>1</MatchMovieDim>
     <UseQTSoundCompression>0</UseQTSoundCompression>
     <AlphaOption></AlphaOption>

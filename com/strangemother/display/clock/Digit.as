@@ -2,6 +2,9 @@
 {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.*;
+	import com.strangemother.event.DigitEvent;
+	
+	import fl.motion.AnimatorUniversal;
 	
 	import flash.display.MovieClip;
 	import flash.utils.describeType;
@@ -19,6 +22,15 @@
 		
 		private var _value:String = '';
 		
+		public var previousAnimationSpeedStart:Number = 0;
+		public var previousAnimationSpeedEnd:Number = 0;
+		
+		public static const TICK_START:String = 'tickStart';
+		public static const TICK_COMPLETE:String = 'tickComplete';
+		public static const TICK_SPEED_CHANGE:String = 'tickSpeedChange';
+		public static const TICK_SPEED:String = 'tickSpeed';
+		public static const VALUE:String = 'value';
+		
 		public function Digit()
 		{
 		
@@ -26,6 +38,7 @@
 		
 		private function topAnimation():void
 		{
+			
 			topPaddleB.character.digit.text = _value;
 			
 			TweenMax.to(topPaddle, animationSpeedStart, {scaleY: 0,ease:Expo.easeIn, onComplete: function(){
@@ -42,6 +55,12 @@
 			TweenMax.to(bottomPaddle, animationSpeedEnd, {scaleY: 1, ease:Expo.easeOut, onComplete: function(){
 				bottomPaddleB.character.digit.text = _value;
 			}});
+		}
+		
+		private function dispatchDigitEvent(type:String):void
+		{
+			var event:DigitEvent = new DigitEvent(type);
+			this.dispatchEvent(event);
 		}
 		
 		private function replicate(sourceMovieClip:MovieClip, movieClip:MovieClip):MovieClip
@@ -91,9 +110,11 @@
 		
 		
 		public function set value(val:String):void
-		{			
+		{	
 			var oldValue:String = _value
 			_value = val;
+			
+			this.dispatchDigitEvent(VALUE);
 			
 			if(_value != oldValue)
 				topAnimation();
@@ -110,9 +131,20 @@
 		
 		public function calculateClickSpeed(delay:Number = 1000)
 		{
-			animationSpeedStart = (delay * .45) * .001;  
-			animationSpeedEnd = (delay * .35) * .001;
+			var tempAnimationSpeedStart = (delay * .45) * .001
+			var tempAnimationSpeedEnd =  (delay * .35) * .001;
 			
+			if(tempAnimationSpeedStart != animationSpeedStart || tempAnimationSpeedEnd != animationSpeedEnd)
+			{
+				this.dispatchDigitEvent(TICK_SPEED_CHANGE);
+				previousAnimationSpeedStart = animationSpeedStart;
+				previousAnimationSpeedEnd = animationSpeedEnd;
+			}
+			
+			animationSpeedStart = tempAnimationSpeedStart;  
+			animationSpeedEnd = tempAnimationSpeedEnd;
+			
+			this.dispatchDigitEvent(TICK_SPEED);
 			//trace(animationSpeedStart + " " + animationSpeedEnd);
 		}
 		
