@@ -8,8 +8,6 @@
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 	
-	import flashx.textLayout.elements.InlineGraphicElement;
-	
 	public class Clock extends MovieClip
 	{
 		private var _digits:Array = [];
@@ -21,23 +19,26 @@
 		public static const NUMERIC_SWITCH:String = 'numericSwitch';
 		public static const NUMERIC_RANGE:String = 'numericRange';
 		
+		/**
+		 * Construct - you may pass in as many stage 
+		 * instances of Digit as you please
+		 * */
 		public function Clock(...digits)
 		{
 			if(digits.length > 0)
-			{
 				this.addDigits(digits);
-			}
 			
 			internalTimer = new Timer(this.delay);
 			internalTimer.addEventListener(TimerEvent.TIMER, interTimerTimerEventHandler)
 		}
 		
+		/**
+		 * pass in many instances of on stage Digit
+		 * */
 		public function addDigits(...digits):void
 		{
 			if(digits is Array)
-			{
 				digits = digits[0];
-			}
 			
 			for each(var digit:* in digits)
 			{
@@ -50,15 +51,13 @@
 		 * Passing a position will determine where within the
 		 * numerical sequence you would like the Digit to be 
 		 * applied.
+		 * To pass multiple digits into the array, you can use the
+		 * alternative Clock.addDigits(...)
 		 * */
 		public function addDigit(digit:MovieClip, position:int = int.MAX_VALUE):uint
 		{
-			if(digit)
-			{
-				digit.value = '0';
-				return this.digits.push(digit)
-			}
-			return 0;
+			digit.value = '0';
+			return this.digits.push(digit)
 		}
 		
 		/**
@@ -88,6 +87,15 @@
 			this.digits.forEach(digitForEachCallCallback);	
 		}
 		
+		public function get value():String
+		{
+			return _value;
+		}
+		
+		
+		/**
+		 * this is an internal function not to be used.
+		 * */
 		private function digitForEachCallCallback(item:*, index:int, array:Array):void
 		{
 			var stringArray = String(StringUtils.padLeft(this.value, '0', this.digits.length)).split('');
@@ -96,13 +104,19 @@
 			item.value = stringArray[index].toString();
 		}
 		
+		/**
+		 * Event handler for the internalTimer TICK event.
+		 * */
 		private function interTimerTimerEventHandler(ev:TimerEvent):void
 		{
 			this.dispatchEvent(ev);
 			this.dispatchClockEvent(ClockEvent.TICK);
 			this.value = String(internalTimer.currentCount);
 		}
-			
+		
+		/**
+		 * An internal function for dipatching ClockEvent's
+		 * */
 		private function dispatchClockEvent(type):void
 		{
 			var event:ClockEvent = new ClockEvent(type);
@@ -126,17 +140,21 @@
 			internalTimer.stop();
 		}
 		
+		/**
+		 * Get the currentCount of the internal timer.
+		 * */
 		public function get currentCount():int
 		{
 			return internalTimer.currentCount;
 		}
 		
-		
-		public function get value():String
-		{
-			return _value;
-		}
-		
+		/**
+		 * This function sets the delay for the internalTimer
+		 * and assits in timing speeds for the flip animation.
+		 * If you are not using the internal timer, this value should
+		 * always match the value of the timer used - this will ensure
+		 * the flip animation works correctly.
+		 * */
 		public function set delay(value:Number):void
 		{
 			internalTimer.delay = value;
@@ -148,6 +166,10 @@
 			return _delay;
 		}
 		
+		/**
+		 * tap into the array storing the instances of on stage
+		 * digits.
+		 * */
 		public function set digits(value:Array):void
 		{
 			_digits = value;

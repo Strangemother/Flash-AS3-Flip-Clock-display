@@ -22,8 +22,16 @@ package com.strangemother.projects
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE, addedToStageEventHandler);
 			
+			/**
+			 * create a new clock passing in all my stage instances.
+			 * */
 			clock = new Clock(d1, d2, d3, d4);
+			
+			/**
+			 * start the internal timer
+			 * */
 			clock.start();
+			
 		}
 		
 	}

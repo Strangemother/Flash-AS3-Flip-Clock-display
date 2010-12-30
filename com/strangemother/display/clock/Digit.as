@@ -145,7 +145,6 @@
 			animationSpeedEnd = tempAnimationSpeedEnd;
 			
 			this.dispatchDigitEvent(TICK_SPEED);
-			//trace(animationSpeedStart + " " + animationSpeedEnd);
 		}
 		
 		public function kill():void
